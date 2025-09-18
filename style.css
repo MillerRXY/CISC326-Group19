@@ -1,0 +1,336 @@
+/* Basic reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; font-family: Arial, sans-serif; }
+
+/* Top section
+   - Uses a ::before layer for the background image so only the image has 0.4 opacity
+   - min-height keeps it at least one viewport tall but can grow when stacked vertically */
+.content-section {
+    position: relative;
+    min-height: 100vh;                 /* Allow growth on small screens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6vh 4vw 5vh;
+    text-align: center;
+    color: #fff;
+    /* CSS custom property controls bg opacity; JS updates this smoothly on scroll */
+    --bg-opacity: 0.4;                 /* Initial background opacity (image only) */
+}
+
+/* Background image layer (does not affect children) */
+.content-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('Team-Rocket.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;      /* Parallax-like feel */
+    opacity: var(--bg-opacity);
+    z-index: 0;                        /* Sit behind foreground content */
+    pointer-events: none;
+}
+
+/* Foreground needs to sit above the bg layer */
+.content-section > * { position: relative; z-index: 1; }
+
+.title-image {
+    max-width: 500px;
+    height: auto;
+    display: block;
+    margin: 0 auto 0.5rem;
+}
+/* Title styles */
+/* Title styles */
+
+.title-wrapper h2, 
+.title-wrapper h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: #ffffff;
+    -webkit-text-stroke: 2px #000000;  /* Strong black outline */
+}
+
+/* Keep shadow only on h1 */
+
+.title-wrapper h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    /* No text-shadow */
+}
+
+.title-wrapper h3 {
+    font-size: 1.4rem;
+    /* No text-shadow */
+}
+
+
+/* Cards container */
+
+.cards-row {
+    margin-top: 6vh;
+    width: clamp(360px, 92vw, 1200px);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(280px, 1fr));
+    gap: 2rem;
+    justify-items: stretch;
+    align-items: stretch;
+    overflow: visible; /* allow overlap */
+}
+
+.card {
+    aspect-ratio: 1 / 1;
+    border: 1px solid rgba(128,128,128,0.85);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.18);
+    padding: 1rem;
+    position: relative;                /* Needed for z-index layering */
+    overflow: hidden;                  /* Hide label slide transitions */
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    transition: opacity 500ms ease, transform 280ms ease, background-color 200ms ease;
+    will-change: transform, opacity, background-color;
+}
+.card.show { opacity: 1; transform: translateY(0) scale(1); }
+
+/* Allow overlap when focused */
+.cards-row { overflow: visible; }
+
+/* Labels inside card */
+.card .label {
+    /* Center the text block inside the square */
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 0.75rem;
+    font-family: 'Orbitron', sans-serif;
+    color: #ffffff;
+    -webkit-text-stroke: 2px #000000;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    user-select: none;
+    pointer-events: none; /* Ignore pointer so only the card handles events */
+}
+
+/* Before-text is visible initially */
+.card .label.before {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 220ms ease, transform 220ms ease;
+}
+
+/* After-text is hidden initially */
+.card .label.after {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 220ms ease 120ms, transform 220ms ease 120ms; /* delay to appear after bg turns gray */
+}
+
+/* Step 1: start transition -> fade out "before" */
+.card.transitioning .label.before {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+/* Step 2: turn background to solid gray (opaque) */
+.card.gray {
+    background-color: #cfcfcf; /* Opaque gray */
+    border-color: #bdbdbd;
+}
+
+/* Step 3: show "after" text */
+.card.after-shown .label.after {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Focus motion (desktop only): move toward center and enlarge */
+.card.focus {
+    transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(1.35);
+    z-index: 20;
+}
+
+/* Disable enlarge/move under 900px: keep only text/background change */
+@media (max-width: 900px) {
+    .card.focus {
+        transform: none; /* no scale or translate */
+        z-index: 20;     /* still ensure it can cover neighbors if needed */
+    }
+}
+/* Bottom section: black */
+.members-section { min-height: 100vh; background: #000; }
+
+/* Stack vertically on narrow screens and keep each square visible
+   The section can grow vertically so nothing overflows into the black area */
+@media (max-width: 900px) {
+    .cards-row {
+        grid-template-columns: 1fr; /* Vertical stack */
+        gap: 1rem;
+    }
+}
+
+/* Members section base */
+.members-section {
+    min-height: 100vh;
+    background: #000;               /* Keep black background */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6vh 4vw;
+    text-align: center;
+}
+
+/* Title */
+.members-title {
+    font-family: 'Orbitron', sans-serif;
+    color: #ffffff;
+    -webkit-text-stroke: 2px #000000;   /* Keep consistency with headings */
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+/* Grid */
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 per row */
+    gap: 4rem;
+    justify-content: center;   /* center grid inside container */
+}
+
+/* Each member card: red border, white background */
+.member-card {
+    width: 300px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;   /* vertical layout */
+    justify-content: center;  /* vertical center */
+    align-items: center;      /* horizontal center */
+
+    color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    transition: opacity 500ms ease, transform 500ms ease;
+}
+
+/* Revealed state */
+.member-card.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.member-name {
+    font-size: 1.4rem;
+    margin-bottom: 0.3rem;
+}
+
+.member-email {
+    font-size: 0.9rem;
+    color: #cccccc;  /* slightly dimmer so not抢眼 */
+}
+
+/* On screens <900px, stack vertically (1 per row) */
+@media (max-width: 1000px) {
+    .members-grid {
+        grid-template-columns: 1fr; /* one per row */
+        justify-items: center;      /* center each card horizontally */
+    }
+}
+
+/* Floating updates widget: fixed to top-right */
+.updates-widget {
+    position: fixed;
+    top: 10%;
+    right: 10%;
+    display: grid;
+    grid-auto-flow: row;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.15);          /* subtle while collapsed */
+    color: #fff;
+    cursor: pointer;
+    z-index: 100;                                 /* above cards */
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transition: background 180ms ease, opacity 180ms ease, transform 180ms ease;
+    opacity: 0;                                   /* hidden by default */
+    pointer-events: none;                         /* disabled when hidden */
+}
+
+/* Visible only while viewing content-section */
+.updates-widget.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Hover: slightly darker */
+.updates-widget:hover:not(.expanded) {
+    background: rgba(120,120,120,0.25);
+}
+
+/* Collapsed row */
+.updates-collapsed {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.updates-icon {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+.updates-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+}
+
+/* Expanded panel */
+.updates-expanded {
+    display: none;
+    opacity: 0;
+    transition: opacity 160ms ease;
+}
+
+/* Expanded look: opaque gray background and show content */
+.updates-widget.expanded {
+    background: rgba(128,128,128,0.72);          /* opaque gray */
+}
+
+.updates-widget.expanded .updates-collapsed {
+    display: none;
+}
+
+.updates-widget.expanded .updates-expanded {
+    display: block;
+    opacity: 1;
+}
+
+/* Expanded content typography */
+.updates-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+}
+
+.updates-date,
+.updates-body {
+    font-size: 0.82rem;                           /* smaller text */
+    color: #f0f0f0;
+}
+
+/* Small nudge on hover to feel alive */
+.updates-widget:hover {
+    transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+    .updates-widget {
+      display: none !important;  /* completely hide on small screens */
+    }
+  }

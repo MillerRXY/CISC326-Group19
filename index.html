@@ -1,11 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Group Project Showcase for CISC322/326 - Fall 2025, Team Rocket.">
+    <meta name="author" content="Team Rocket (CISC322/326)">
+    <title>Group Project Showcase</title>
+    <!-- Orbitron for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <!-- Top section with background image, title, and three showcase squares -->
+    <section class="content-section">
+        <div class="title-wrapper">
+            <img src="Group-Name.png" alt="Team Rocket" class="title-image">
+            <h2>CISC322/326</h2>
+            <h3>Fall 2025</h3>
+        </div>
 
+        <!-- Cards row: 3 squares (stack vertically on small screens) -->
+        <div class="cards-row">
+            <!-- Card 1 -->
+            <div class="card" data-after="To be Continued...">
+              <div class="label before">Assignment 1</div>
+              <div class="label after" aria-hidden="true"></div>
+            </div>
+          
+            <!-- Card 2 -->
+            <div class="card" data-after="To be Continued...">
+              <div class="label before">Assignment 2</div>
+              <div class="label after" aria-hidden="true"></div>
+            </div>
+          
+            <!-- Card 3 -->
+            <div class="card" data-after="To be Continued...">
+              <div class="label before">Assignment 3</div>
+              <div class="label after" aria-hidden="true"></div>
+            </div>
+          </div>
+    </section>
+
+    <!-- Floating updates widget (top-right) -->
+    <div class="updates-widget" aria-expanded="false">
+        <!-- Collapsed state -->
+        <div class="updates-collapsed">
+        <img src="ball.png" alt="Updates icon" class="updates-icon">
+        <span class="updates-label">UPDATES</span>
+        </div>
+    
+        <!-- Expanded state (hidden by default) -->
+        <div class="updates-expanded" aria-hidden="true">
+        <div class="updates-title">Latest Update</div>
+        <div class="updates-date">2025-09-18</div>
+        <div class="updates-body">First working version</div>
+        </div>
+    </div>
+
+    <!-- Bottom section (black background) -->
+    <section class="members-section">
+          <!-- Simple section title -->
+        <div class="members-title">Rocket Members:</div>
+        
+        <div class="members-grid">
+            <div class="member-card">
+              <div class="member-name">member1</div>
+              <div class="member-email">xxxxxx.queensu.ca</div>
+            </div>
+            <div class="member-card">
+              <div class="member-name">member2</div>
+              <div class="member-email">xxxxxx.queensu.ca</div>
+            </div>
+            <div class="member-card">
+              <div class="member-name">member3</div>
+              <div class="member-email">xxxxxx.queensu.ca</div>
+            </div>
+            <div class="member-card">
+              <div class="member-name">member4</div>
+              <div class="member-email">xxxxxx.queensu.ca</div>
+            </div>
+            <div class="member-card">
+              <div class="member-name">member5</div>
+              <div class="member-email">xxxxxx.queensu.ca</div>
+            </div>
+            <div class="member-card">
+              <div class="member-name">member6</div>
+              <div class="member-email">xxxxxx.queensu.ca</div>
+            </div>
+          </div>
+          
+    </section>
+
+    <script src="app.js"></script>
 </body>
 </html>
