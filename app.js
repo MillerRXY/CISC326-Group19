@@ -29,7 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // After-text from data-after
     cards.forEach(card => {
       const afterNode = card.querySelector('.label.after');
-      if (afterNode) afterNode.textContent = card.getAttribute('data-after') || '';
+      if (!afterNode) return;
+      if (card.hasAttribute('data-after')) {
+        afterNode.textContent = card.getAttribute('data-after') || '';
+      }
     });
   
     const pending = new WeakMap(); // { toGray, toAfter }
@@ -75,6 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isActive) resetCard(card);
         else runSwapSequence(card);
       });
+    // Allow interactive elements inside the card to be clickable without toggling card state
+    cards.forEach(card => {
+      card.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', (e) => { e.stopPropagation(); });
+      });
+    }); // __STOP_PROP_FOR_LINKS__
     });
     window.addEventListener('resize', () => {
       document.querySelectorAll('.card.focus').forEach(card => {
